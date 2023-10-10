@@ -6,7 +6,3 @@ version  = "1.0.0"
 
 [script]
 dependencies = [ "NadeoServices" ]
-
-#exports = [ "src/QuickChatter.as" ]
-#exports = [ "src/Export.as" ]
-#shared_exports = [ "src/ExportShared.as" ]
