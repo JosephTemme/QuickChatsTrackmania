@@ -10,24 +10,9 @@
 //        print("constructed new QuickChatter");
 //    }
 
-//    bool SendChat(string _chat)
-//    {
-//        print(_chat);
-//        //ToDo: open chat window, fill with chat, press send
-//
-//        return true;
-//    }
-
     // Sends a message to the server.
 	void SendChat(const string &in text)
 	{
-	    print(text);
-//#if TMNEXT
-//		if (!Permissions::InGameChat()) {
-//			return;
-//		}
-//#endif
-
 		auto pg = GetApp().CurrentPlayground;
 		if (pg is null) {
 			//TODO: Queue the message for later
