@@ -5,26 +5,11 @@ bool[] newButtonsPressed = array<bool>(16);
 bool[] lastButtonsPressed = array<bool>(16);
 bool[] nextButtonsPressed = array<bool>(16);
 
-// array of (buttonIds, pressed)
-//array<pair<uint, bool>> inputQueue = array<pair<uint, bool>>(16);
-//pair<uint, bool>[] inputQueue = array<pair<uint, bool>>(16);
-
-// Array of pressed buttonIds.
-bool[] inputQueue = array<bool>(16);
-bool[] emptyQueue = array<bool>(16);
-
-/** Called every frame. `dt` is the delta time (milliseconds since last frame).
-*/
+// Find which controller buttons are pressed.
 bool[] UpdateControllerButtonStatus(float dt) {
-//    print("updating...");
     auto app = GetApp();
 
     auto input = app.InputPort;
-
-//    for (uint i = 0; i < inputQueue.Length; i++)
-//    {
-//            inputQueue[i] = false;
-//    }
 
     for (uint i = 0; i < nextButtonsPressed.Length; i++) {
         nextButtonsPressed[i] = false;
@@ -69,27 +54,4 @@ bool[] UpdateControllerButtonStatus(float dt) {
 
 void UpdateButtonPressed(uint value, Button button) {
     nextButtonsPressed[button] = nextButtonsPressed[button] || value > 0;
-//    if(nextButtonsPressed[button]){
-//        print("Button pressed!");
-//        print(button);
-//    }
 }
-
-//uint toggleState = 0;
-
-//void CheckForTogglePress() {
-//    if (newButtonsPressed[S_Button]) {
-//        // trace('toggling camera');
-//        toggleState = (toggleState + 1) % uint(S_ToggleMode);
-//        if (toggleState == 0) {
-//            SetCamChoice(S_CameraA);
-//        } else if (toggleState == 1) {
-//            SetCamChoice(S_CameraB);
-//        } else if (toggleState == 2) {
-//            SetCamChoice(S_CameraC);
-//        } else {
-//            SetCamChoice(S_CameraA);
-//            warn("Got toggle press but found an invalid toggleState: " + toggleState + " (should 0, 1, or 2)");
-//        }
-//    }
-//}
