@@ -2,6 +2,11 @@
     // Sends a message to the server.
 	void SendChat(const string &in text)
 	{
+#if TMNEXT
+		if (!Permissions::InGameChat()) {
+			return;
+		}
+#endif
 		auto pg = GetApp().CurrentPlayground;
 		if (pg is null) {
 			warn("Can't send message right now because there's no playground!");
