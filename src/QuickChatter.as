@@ -1,6 +1,8 @@
 const int InputQueueSize = 2;
-const int SpamDelay = 500;
+const int MisClickDelay = 100;
 const int QuickChatListenDelay = 2000;
+const int QuickChatsTillSpam = 3;
+const int SpamDetectionDuration = 00;
 
 class QuickChatter
 {
@@ -9,7 +11,7 @@ class QuickChatter
     Queue inputQueueTimes = Queue(InputQueueSize);
     Queue inputQueueVirtualKeys = Queue(InputQueueSize);
     Queue inputQueueButtons = Queue(InputQueueSize);
-//    Queue numChatsWithinSpamDelay = Queue()
+    Queue sentChats = Queue(QuickChatsTillSpam);
 
     QuickChatter() {}
 
@@ -85,8 +87,17 @@ class QuickChatter
     // Sends chats, if applicable.
     void ProcessQueue(bool isKeyPress)
     {
+        // Dequeue from sentChats if applicable.
+//        print("sentChats.peakRear() - sentChats.peakFront() > SpamDetectionDuration: ");
+//        print(sentChats.peakRear() - sentChats.peakFront());
+//        print(sentChats.peakRear() - sentChats.peakFront() > SpamDetectionDuration);
+        if(totalTime - sentChats.peakFront() > SpamDetectionDuration){
+//            print("Dequeueing sentChats");
+            sentChats.dequeue();
+        }
+
         // From the "beginning", iterate through circular queue to check if two key presses
-        // are detected within the SpamDelay duration.
+        // are detected within the Mis-clickDelay duration.
         if(inputQueueTimes.peakFront() == inputQueueTimes.peakRear())
         {
             // Queue size is 1
@@ -96,22 +107,31 @@ class QuickChatter
             // Key/Button press was not quick enough.
             DequeueInputQueues();
         }
-        else if(lastSentTime == 0 || inputQueueTimes.peakRear() - lastSentTime > SpamDelay)
+        else if(lastSentTime == 0 || inputQueueTimes.peakRear() - lastSentTime > MisClickDelay)
         {
             // Sending chat.
-            lastSentTime = totalTime;
-
-            if(isKeyPress)
-                SendChatFromKey(inputQueueVirtualKeys.peakRear());
+            if(sentChats.enqueue(inputQueueTimes.peakRear()) != -1)
+            {
+                lastSentTime = totalTime;
+                if(isKeyPress)
+                    SendChatFromKey(inputQueueVirtualKeys.peakRear());
+                else
+                    SendChatFromButton(inputQueueButtons.peakRear());
+            }
             else
-                SendChatFromButton(inputQueueButtons.peakRear());
+            {
+                print("\tSpam hammer down");
+//                sentChats.displayQueue();
+                ClearQueues();
+            }
         }
         else
         {
-            print("Spam hammer down.");
+            print("Mis-click/Sticky key protection.");
 //            DisplayQueues();
 //            print("lastSentTime: " + lastSentTime);
-            ClearQueues();
+//            ClearQueues();
+            DequeueInputQueues();
         }
     }
 
