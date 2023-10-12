@@ -2,7 +2,7 @@ const int InputQueueSize = 2;
 const int MisClickDelay = 100;
 const int QuickChatListenDelay = 2000;
 const int QuickChatsTillSpam = 3;
-const int SpamDetectionDuration = 00;
+const int SpamDetectionDuration = 3000;
 
 class QuickChatter
 {
@@ -25,17 +25,17 @@ class QuickChatter
 #endif
 
         print("\t" + text);
-    //    auto pg = GetApp().CurrentPlayground;
-    //    if (pg is null) {
-    //        warn("Can't send message right now because there's no playground!");
-    //        return;
-    //    }
-    //
-    //    if (text.Length > 2000) {
-    //        pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
-    //    } else {
-    //        pg.Interface.ChatEntry = text;
-    //    }
+        auto pg = GetApp().CurrentPlayground;
+        if (pg is null) {
+            warn("Can't send message right now because there's no playground!");
+            return;
+        }
+
+        if (text.Length > 2000) {
+            pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
+        } else {
+            pg.Interface.ChatEntry = text;
+        }
 
         ClearQueues();
     }
@@ -88,11 +88,7 @@ class QuickChatter
     void ProcessQueue(bool isKeyPress)
     {
         // Dequeue from sentChats if applicable.
-//        print("sentChats.peakRear() - sentChats.peakFront() > SpamDetectionDuration: ");
-//        print(sentChats.peakRear() - sentChats.peakFront());
-//        print(sentChats.peakRear() - sentChats.peakFront() > SpamDetectionDuration);
         if(totalTime - sentChats.peakFront() > SpamDetectionDuration){
-//            print("Dequeueing sentChats");
             sentChats.dequeue();
         }
 
@@ -120,17 +116,15 @@ class QuickChatter
             }
             else
             {
-                print("\tSpam hammer down");
-//                sentChats.displayQueue();
+                print("\tSpam hammer down for "
+                    + int((SpamDetectionDuration - (inputQueueTimes.peakRear() - sentChats.peakFront()))/1000)
+                    + " seconds.");
                 ClearQueues();
             }
         }
         else
         {
             print("Mis-click/Sticky key protection.");
-//            DisplayQueues();
-//            print("lastSentTime: " + lastSentTime);
-//            ClearQueues();
             DequeueInputQueues();
         }
     }
@@ -160,8 +154,8 @@ class QuickChatter
 
     void DisplayQueues()
     {
-//        inputQueueVirtualKeys.displayQueue();
-//        inputQueueButtons.displayQueue();
+        inputQueueVirtualKeys.displayQueue();
+        inputQueueButtons.displayQueue();
         inputQueueTimes.displayQueue();
     }
 }
