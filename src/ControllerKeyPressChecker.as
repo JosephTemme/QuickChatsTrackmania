@@ -1,5 +1,8 @@
-// Custom code to listen for Controller inputs, provided by:
-//      https://github.com/XertroV/tm-camera-toggle.git
+/* Custom code to listen for Controller inputs.
+* Skeleton provided by:      https://github.com/XertroV/tm-camera-toggle.git
+* Further modified by Joey Temme.
+*/
+bool[] emptyQueue = array<bool>(16);
 
 bool[] newButtonsPressed = array<bool>(16);
 bool[] lastButtonsPressed = array<bool>(16);
@@ -15,7 +18,6 @@ bool[] UpdateControllerButtonStatus(float dt) {
         nextButtonsPressed[i] = false;
     }
 
-    //ToDo: see what buttons are being pressed.
     for (uint i = 0; i < input.Script_Pads.Length; i++) {
         auto pad = input.Script_Pads[i];
         if (pad.Type >= 2)
@@ -44,10 +46,7 @@ bool[] UpdateControllerButtonStatus(float dt) {
         lastButtonsPressed[i] = nextButtonsPressed[i];
     }
 
-    // update in the menu so settings preview of button presses works. but we don't want to try and toggle the camera in the menu
     if (app.CurrentPlayground is null) return emptyQueue;
-
-//    CheckForTogglePress();
 
     return newButtonsPressed;
 }

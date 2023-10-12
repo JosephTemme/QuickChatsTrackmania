@@ -1,7 +1,7 @@
 float g_dt = 0;
 float totalTime = 0;
-//QuickChatter@ qC;
-//array<vec2<int, float>> inputQueue;
+float sixteenMinutes = 1000000;
+QuickChatter qc;
 
 enum Button {
     Left = 0, Right, Up, Down,
@@ -14,30 +14,18 @@ void Main()
 	print("This is Rocket League!");
 }
 
-//array<vec2<VirtualKey, string>> QuickChats;
-void OnSettingsChanged()
-{
-//    print("Quick chat settings changed.");
-
-}
+void OnSettingsChanged() {}
 
 void OnKeyPress(bool down, VirtualKey key)
 {
     if (down)
     {
-        int keyValue = int(key);
+        // Add pressed key and time to the queues
+        qc.inputQueueTimes.enqueue(totalTime);
+        qc.inputQueueVirtualKeys.enqueue(key);
 
-        if(key == Setting_QuickChat1Binding)
-            SendChat(Setting_QuickChat1Message);
-
-        if(key == Setting_QuickChat2Binding)
-            SendChat(Setting_QuickChat2Message);
-
-        if(key == Setting_QuickChat3Binding)
-            SendChat(Setting_QuickChat3Message);
-
-        if(key == Setting_QuickChat4Binding)
-            SendChat(Setting_QuickChat4Message);
+        // Process queue
+        qc.ProcessQueue(true);
     }
 }
 
@@ -45,28 +33,49 @@ void OnKeyPress(bool down, VirtualKey key)
 void Update(float dt)
 {
     g_dt = dt;
-    auto pressedButtons = UpdateControllerButtonStatus(dt);
+    totalTime += dt;
 
-    for(int index = 0; index < pressedButtons.Length; index++)
+    if (totalTime > sixteenMinutes)
     {
-        if(pressedButtons[index] && Setting_QuickChat5Binding == index)
-        {
-            SendChat(Setting_QuickChat5Message);
-        }
-
-        if(pressedButtons[index] && Setting_QuickChat6Binding == index)
-        {
-            SendChat(Setting_QuickChat6Message);
-        }
-
-        if(pressedButtons[index] && Setting_QuickChat7Binding == index)
-        {
-            SendChat(Setting_QuickChat7Message);
-        }
-
-        if(pressedButtons[index] && Setting_QuickChat8Binding == index)
-        {
-            SendChat(Setting_QuickChat8Message);
-        }
+        totalTime = 0;
     }
+
+//    //Reset totalTime when chats are sent or after some time.
+//
+//    auto pressedButtons = UpdateControllerButtonStatus(dt);
+//
+//    // ToDo: 1. Add pressed buttons to the queue
+////    for(int index = 0; index < pressedButtons.Length; index++)
+////    {
+////        inputQueue[inputQIndex]
+////    }
+//    // ToDo: 2. process queue
+////    ProcessQueue();
+//    // ToDo: 3. send chats if applicable.
+//
+//
+//
+//
+//    for(int index = 0; index < pressedButtons.Length; index++)
+//    {
+//        if(pressedButtons[index] && Setting_QuickChat5Binding == index)
+//        {
+//            qc.SendChat(Setting_QuickChat5Message);
+//        }
+//
+//        if(pressedButtons[index] && Setting_QuickChat6Binding == index)
+//        {
+//            qc.SendChat(Setting_QuickChat6Message);
+//        }
+//
+//        if(pressedButtons[index] && Setting_QuickChat7Binding == index)
+//        {
+//            qc.SendChat(Setting_QuickChat7Message);
+//        }
+//
+//        if(pressedButtons[index] && Setting_QuickChat8Binding == index)
+//        {
+//            qc.SendChat(Setting_QuickChat8Message);
+//        }
+//    }
 }
