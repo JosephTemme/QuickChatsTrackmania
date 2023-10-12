@@ -117,7 +117,7 @@ class QuickChatter
             else
             {
                 print("\tSpam hammer down for "
-                    + int((SpamDetectionDuration - (inputQueueTimes.peakRear() - sentChats.peakFront()))/1000)
+                    + (int((SpamDetectionDuration - (inputQueueTimes.peakRear() - sentChats.peakFront()))/1000) + 1)
                     + " seconds.");
                 ClearQueues();
             }
@@ -158,4 +158,6 @@ class QuickChatter
         inputQueueButtons.displayQueue();
         inputQueueTimes.displayQueue();
     }
+
+
 }
