@@ -12,16 +12,16 @@ string Setting_QuickChat3Message = "Glhf";
 string Setting_QuickChat4Message = "gg";
 
 [Setting name="Quick chat 1 Binding" category="Quick Chats"]
-VirtualKey Setting_QuickChat1Binding = VirtualKey::W;
+VirtualKey Setting_QuickChat1Binding = VirtualKey::I;
 
 [Setting name="Quick chat 2 Binding" category="Quick Chats"]
-VirtualKey Setting_QuickChat2Binding = VirtualKey::D;
+VirtualKey Setting_QuickChat2Binding = VirtualKey::L;
 
 [Setting name="Quick chat 3 Binding" category="Quick Chats"]
-VirtualKey Setting_QuickChat3Binding = VirtualKey::S;
+VirtualKey Setting_QuickChat3Binding = VirtualKey::K;
 
 [Setting name="Quick chat 4 Binding" category="Quick Chats"]
-VirtualKey Setting_QuickChat4Binding = VirtualKey::A;
+VirtualKey Setting_QuickChat4Binding = VirtualKey::J;
 
 // Controller (Xbox)
 [Setting name="Quick chat 5 Message" category="Quick Chats"]
