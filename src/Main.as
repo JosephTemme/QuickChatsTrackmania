@@ -71,5 +71,5 @@ void Update(float dt)
 
 void Render()
 {
-    RenderInterface();
+    qc.qci.RenderInterface();
 }

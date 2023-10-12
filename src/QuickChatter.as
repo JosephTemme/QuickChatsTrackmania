@@ -2,11 +2,12 @@ const int InputQueueSize = 2;
 const int MisClickDelay = 100;
 const int QuickChatListenDelay = 2000;
 const int QuickChatsTillSpam = 3;
-const int SpamDetectionDuration = 3000;
+const int SpamDetectionDuration = 4000;
 
 class QuickChatter
 {
     float lastSentTime = 0;
+    QuickChatUI qci = QuickChatUI();
 
     Queue inputQueueTimes = Queue(InputQueueSize);
     Queue inputQueueVirtualKeys = Queue(InputQueueSize);
@@ -25,17 +26,17 @@ class QuickChatter
 #endif
 
         print("\t" + text);
-        auto pg = GetApp().CurrentPlayground;
-        if (pg is null) {
-            warn("Can't send message right now because there's no playground!");
-            return;
-        }
-
-        if (text.Length > 2000) {
-            pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
-        } else {
-            pg.Interface.ChatEntry = text;
-        }
+//        auto pg = GetApp().CurrentPlayground;
+//        if (pg is null) {
+//            warn("Can't send message right now because there's no playground!");
+//            return;
+//        }
+//
+//        if (text.Length > 2000) {
+//            pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
+//        } else {
+//            pg.Interface.ChatEntry = text;
+//        }
 
         ClearQueues();
     }
@@ -116,17 +117,20 @@ class QuickChatter
             }
             else
             {
-                print("\tSpam hammer down for "
-                    + (int((SpamDetectionDuration - (inputQueueTimes.peakRear() - sentChats.peakFront()))/1000) + 1)
-                    + " seconds.");
+                qci.ActivateSpamHammer(sentChats.peakFront());
                 ClearQueues();
             }
         }
         else
         {
-            print("Mis-click/Sticky key protection.");
+            print("Mis-click/Sticky key/Supersonic spam protection.");
             DequeueInputQueues();
         }
+    }
+
+    float MillisecondsRemainingOnSpamCooldown()
+    {
+        return inputQueueTimes.peakRear() - sentChats.peakFront();
     }
 
     int DequeueInputQueues()
