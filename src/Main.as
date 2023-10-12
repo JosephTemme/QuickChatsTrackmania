@@ -21,8 +21,14 @@ void OnKeyPress(bool down, VirtualKey key)
     if (down)
     {
         // Add pressed key and time to the queues
-        qc.inputQueueTimes.enqueue(totalTime);
-        qc.inputQueueVirtualKeys.enqueue(key);
+        if(key == Setting_QuickChat1Binding
+            || key == Setting_QuickChat2Binding
+            || key == Setting_QuickChat3Binding
+            || key == Setting_QuickChat4Binding)
+        {
+            qc.inputQueueTimes.enqueue(totalTime);
+            qc.inputQueueVirtualKeys.enqueue(key);
+        }
 
         // Process queue
         qc.ProcessQueue(true);
@@ -40,42 +46,25 @@ void Update(float dt)
         totalTime = 0;
     }
 
-//    //Reset totalTime when chats are sent or after some time.
-//
-//    auto pressedButtons = UpdateControllerButtonStatus(dt);
-//
-//    // ToDo: 1. Add pressed buttons to the queue
-////    for(int index = 0; index < pressedButtons.Length; index++)
-////    {
-////        inputQueue[inputQIndex]
-////    }
-//    // ToDo: 2. process queue
-////    ProcessQueue();
-//    // ToDo: 3. send chats if applicable.
-//
-//
-//
-//
-//    for(int index = 0; index < pressedButtons.Length; index++)
-//    {
-//        if(pressedButtons[index] && Setting_QuickChat5Binding == index)
-//        {
-//            qc.SendChat(Setting_QuickChat5Message);
-//        }
-//
-//        if(pressedButtons[index] && Setting_QuickChat6Binding == index)
-//        {
-//            qc.SendChat(Setting_QuickChat6Message);
-//        }
-//
-//        if(pressedButtons[index] && Setting_QuickChat7Binding == index)
-//        {
-//            qc.SendChat(Setting_QuickChat7Message);
-//        }
-//
-//        if(pressedButtons[index] && Setting_QuickChat8Binding == index)
-//        {
-//            qc.SendChat(Setting_QuickChat8Message);
-//        }
-//    }
+    auto pressedButtons = UpdateControllerButtonStatus();
+    // Add pressed buttons to the queue
+    // Check if any pressed buttons are bound in settings and add them to the queue.
+    for(int index = 0; index < pressedButtons.Length; index++)
+    {
+        if(pressedButtons[index] == true)
+        {
+            Button button = Button(index);
+            if(button == Setting_QuickChat5Binding
+                || button == Setting_QuickChat6Binding
+                || button == Setting_QuickChat7Binding
+                || button == Setting_QuickChat8Binding)
+            {
+                qc.inputQueueTimes.enqueue(totalTime);
+                qc.inputQueueButtons.enqueue(button);
+            }
+        }
+    }
+
+    // Process queue
+    qc.ProcessQueue(false);
 }

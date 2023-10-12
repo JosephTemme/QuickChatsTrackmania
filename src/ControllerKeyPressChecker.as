@@ -9,7 +9,7 @@ bool[] lastButtonsPressed = array<bool>(16);
 bool[] nextButtonsPressed = array<bool>(16);
 
 // Find which controller buttons are pressed.
-bool[] UpdateControllerButtonStatus(float dt) {
+bool[] UpdateControllerButtonStatus() {
     auto app = GetApp();
 
     auto input = app.InputPort;
