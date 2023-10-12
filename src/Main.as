@@ -68,8 +68,3 @@ void Update(float dt)
     // Process queue
     qc.ProcessQueue(false);
 }
-
-void Render()
-{
-    RenderInterface();
-}
