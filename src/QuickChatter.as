@@ -7,6 +7,7 @@ const int SpamDetectionDuration = 4000;
 class QuickChatter
 {
     float lastSentTime = 0;
+    bool lastPressWasKey = false;
     QuickChatUI qci = QuickChatUI();
 
     Queue inputQueueTimes = Queue(InputQueueSize);
@@ -55,8 +56,6 @@ class QuickChatter
 
         if(key == Setting_QuickChat4Binding)
             SendChat(Setting_QuickChat4Message);
-
-        ClearQueues();
     }
 
     void SendChatFromButton(int controllerButtonId)
@@ -81,15 +80,22 @@ class QuickChatter
         {
             SendChat(Setting_QuickChat8Message);
         }
-
-        ClearQueues();
     }
 
     // Sends chats, if applicable.
     // parameters: bool isKeyPress: true if keyboard button press and not controller button press.
     void ProcessQueue(bool isKeyPress)
     {
-        // Dequeue from sentChats if applicable.
+        bool differentKeysWerePressed =
+            lastPressWasKey != isKeyPress
+            || (isKeyPress
+                    && inputQueueVirtualKeys.peakFront() != -1 && inputQueueVirtualKeys.peakRear() != -1
+                    && inputQueueVirtualKeys.peakFront() != inputQueueVirtualKeys.peakRear())
+               || (!isKeyPress
+                    && inputQueueButtons.peakFront() != -1 && inputQueueButtons.peakRear() != -1
+                    && inputQueueButtons.peakFront() != inputQueueButtons.peakRear());
+
+        // Dequeue from sentChats once out of spam detection range.
         if(totalTime - sentChats.peakFront() > SpamDetectionDuration){
             sentChats.dequeue();
         }
@@ -110,24 +116,34 @@ class QuickChatter
             // Sending chat.
             if(sentChats.enqueue(inputQueueTimes.peakRear()) != -1)
             {
-                lastSentTime = totalTime;
-                if(isKeyPress)
-                    SendChatFromKey(inputQueueVirtualKeys.peakRear());
+                if(differentKeysWerePressed)
+                {
+                    print("Different keys were pressed.");
+                    DequeueInputQueues();
+                }
                 else
-                    SendChatFromButton(inputQueueButtons.peakRear());
+                {
+                    lastSentTime = totalTime;
+                    if(isKeyPress)
+                        SendChatFromKey(inputQueueVirtualKeys.peakRear());
+                    else
+                        SendChatFromButton(inputQueueButtons.peakRear());
+                }
             }
             else
             {
                 qci.ActivateSpamHammer(sentChats.peakFront());
-                ClearQueues();
             }
+
+            ClearQueues();
         }
         else
         {
             print("Mis-click/Sticky key/Supersonic spam protection.");
-            DisplayQueues();
             ClearQueues();
         }
+
+        lastPressWasKey = isKeyPress;
     }
 
     float MillisecondsRemainingOnSpamCooldown()

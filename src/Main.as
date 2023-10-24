@@ -58,6 +58,8 @@ void OnKeyPress(bool down, VirtualKey key)
 // Called every frame. `dt` is the delta time (milliseconds since last frame).
 void Update(float dt)
 {
+    bool buttonWasPressed = false;
+
     g_dt = dt;
     totalTime += dt;
 
@@ -82,12 +84,14 @@ void Update(float dt)
             {
                 qc.inputQueueTimes.enqueue(totalTime);
                 qc.inputQueueButtons.enqueue(button);
+                buttonWasPressed = true;
             }
         }
     }
 
     // Process queue
-    qc.ProcessQueue(false);
+    if(buttonWasPressed)
+        qc.ProcessQueue(false);
 }
 
 void ResetTimersAndQueues()
@@ -100,5 +104,5 @@ void ResetTimersAndQueues()
 
 void Render()
 {
-//    qc.qci.RenderInterface();
+    qc.qci.RenderInterface();
 }

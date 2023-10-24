@@ -6,8 +6,8 @@ class QuickChatUI
 
     QuickChatUI() {}
 
-//    void RenderInterface()
-//    {
+    void RenderInterface()
+    {
 //        // Rectangle
 //        nvg::BeginPath();
 //    //    nvg::RoundedRect(pos.x, pos.y, size.x, size.y, Setting_Gearbox_BorderRadius);
@@ -18,9 +18,9 @@ class QuickChatUI
 //        nvg::FillColor(vec4(0.2f, 1, 0.6f, 1));
 //
 //        nvg::Fill();
-//
-//        ShowNotifications();
-//    }
+
+        ShowNotifications();
+    }
 
     void ShowNotifications()
     {
