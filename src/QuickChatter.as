@@ -119,6 +119,7 @@ class QuickChatter
                 if(differentKeysWerePressed)
                 {
                     print("Different keys were pressed.");
+                    sentChats.dequeue();
                     DequeueInputQueues();
                 }
                 else
