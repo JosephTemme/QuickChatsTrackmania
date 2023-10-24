@@ -125,6 +125,7 @@ class QuickChatter
         else
         {
             print("Mis-click/Sticky key/Supersonic spam protection.");
+            DisplayQueues();
             ClearQueues();
         }
     }
@@ -160,8 +161,15 @@ class QuickChatter
     // Prints the contents of the queues.
     void DisplayQueues()
     {
+
+        print("totalTime: \t" + totalTime);
+        print("g_dt: \t" + g_dt);
+
+        print("inputQueueVirtualKeys: ");
         inputQueueVirtualKeys.displayQueue();
+        print("inputQueueButtons: ");
         inputQueueButtons.displayQueue();
+        print("inputQueueTimes: ");
         inputQueueTimes.displayQueue();
     }
 

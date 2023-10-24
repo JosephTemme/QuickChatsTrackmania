@@ -61,13 +61,10 @@ void Update(float dt)
     g_dt = dt;
     totalTime += dt;
 
+    // Prevent float overflow by resetting counters.
     if (totalTime > sixteenMinutes)
     {
-        totalTime = 0;
-        g_dt = 0;
-        qc.ClearQueues();
-        print("Sixteen minutes have passed.");
-        
+        ResetTimersAndQueues();
     }
 
     auto pressedButtons = UpdateControllerButtonStatus();
@@ -93,7 +90,15 @@ void Update(float dt)
     qc.ProcessQueue(false);
 }
 
+void ResetTimersAndQueues()
+{
+    totalTime = 0;
+    g_dt = 0;
+    qc.ClearQueues();
+    qc.lastSentTime = 0;
+}
+
 void Render()
 {
-    qc.qci.RenderInterface();
+//    qc.qci.RenderInterface();
 }
