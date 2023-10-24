@@ -1,5 +1,5 @@
 const int InputQueueSize = 2;
-const int MisClickDelay = 100;
+const int MisClickDelay = 300;
 const int QuickChatListenDelay = 2000;
 const int QuickChatsTillSpam = 3;
 const int SpamDetectionDuration = 4000;
@@ -86,6 +86,7 @@ class QuickChatter
     }
 
     // Sends chats, if applicable.
+    // parameters: bool isKeyPress: true if keyboard button press and not controller button press.
     void ProcessQueue(bool isKeyPress)
     {
         // Dequeue from sentChats if applicable.
@@ -124,7 +125,7 @@ class QuickChatter
         else
         {
             print("Mis-click/Sticky key/Supersonic spam protection.");
-            DequeueInputQueues();
+            ClearQueues();
         }
     }
 
@@ -156,6 +157,7 @@ class QuickChatter
         }
     }
 
+    // Prints the contents of the queues.
     void DisplayQueues()
     {
         inputQueueVirtualKeys.displayQueue();

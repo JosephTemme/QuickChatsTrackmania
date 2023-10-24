@@ -16,6 +16,26 @@ void Main()
 
 void OnSettingsChanged() {}
 
+void OnNewServerAsync()
+{
+    while (GetApp().CurrentPlayground is null) {
+        yield();
+    }
+//    SendChatFormat("json");
+}
+
+void OnServerChanged(const string &in login)
+{
+    print("Server changed.");
+    totalTime = 0;
+    qc.ClearQueues();
+
+    if (login != "") {
+        return;
+    }
+    startnew(CoroutineFunc(OnNewServerAsync));
+}
+
 void OnKeyPress(bool down, VirtualKey key)
 {
     if (down)
@@ -44,6 +64,10 @@ void Update(float dt)
     if (totalTime > sixteenMinutes)
     {
         totalTime = 0;
+        g_dt = 0;
+        qc.ClearQueues();
+        print("Sixteen minutes have passed.");
+        
     }
 
     auto pressedButtons = UpdateControllerButtonStatus();
