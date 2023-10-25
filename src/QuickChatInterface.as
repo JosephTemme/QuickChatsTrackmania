@@ -1,11 +1,10 @@
 const float BindingsAndMessagesBorderRadius = 10;
-const float ShowBindingsDuration = 5000;
+const float ShowBindingsDuration = 3000;
 // Colors
 const vec4 Pink = vec4(1, 0.2f, 0.6f, 1);
 const vec4 TMGreen = vec4(0.2f, 1, 0.6f, 1);
 const vec4 Blue = vec4(0, 0, 1, 1);
 
-const vec2 notificationPosition = vec2(1500, 950);
 const int qcSizeX = 250;
 const int qcSizeY = 100;
 const int maxMessageLength = 23;
@@ -50,6 +49,16 @@ class QuickChatUI
     // Parameter: int msRemaining = milliseconds left till no longer considered spam.
     void ShowSpamHammerNotification()
     {
+        //ToDo: Re-use.
+        vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
+        vec2 size = UI::GetWindowSize();
+        vec2 pos = UI::GetWindowPos() / (screenSize - size);
+
+        int centerX = int(pos.x) + (7*int(screenSize.x))/10;
+        int centerY = int(pos.y) + (11*int(screenSize.y))/18;
+
+        vec2 notificationPosition = vec2(centerX, centerY);
+
         if(oldestSpamContenderTime == 0)
             return;
 
@@ -61,7 +70,7 @@ class QuickChatUI
         }
 
         int convertedSecondsRemaining = int((SpamDetectionDuration - (totalTime - oldestSpamContenderTime))/1000) +1;
-        string message = "Spam hammer down for " + convertedSecondsRemaining;
+        string message = "Chat disabled for " + convertedSecondsRemaining;
         if(convertedSecondsRemaining == 1)
         {
             message += " second.";
@@ -84,12 +93,10 @@ class QuickChatUI
         vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
         vec2 size = UI::GetWindowSize();
         vec2 pos = UI::GetWindowPos() / (screenSize - size);
-//        print("pos: " + pos.x + ", " + pos.y);
-//        print("size: " + size.y + ", " + size.y);
-//        print("screenSize: " + screenSize.x + ", " + screenSize.y);
 
         int centerX = int(pos.x) + (8*int(screenSize.x))/10;
         int centerY = int(pos.y) + (2*int(screenSize.y))/3;
+
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime)
         {
             ShowBindingWithMessage(tostring(Setting_QuickChat1Binding), Setting_QuickChat1Message, centerX, centerY, qcSizeX, qcSizeY);
