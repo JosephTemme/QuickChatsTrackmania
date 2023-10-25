@@ -1,5 +1,5 @@
 const int InputQueueSize = 2;
-const int MisClickDelay = 300;
+const int MisClickDelay = 200;
 const int QuickChatListenDelay = 2000;
 const int QuickChatsTillSpam = 3;
 const int SpamDetectionDuration = 4000;
@@ -118,7 +118,6 @@ class QuickChatter
             {
                 if(differentKeysWerePressed)
                 {
-                    print("Different keys were pressed.");
                     sentChats.dequeue();
                     DequeueInputQueues();
                 }
