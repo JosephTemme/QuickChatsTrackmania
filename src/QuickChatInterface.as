@@ -45,6 +45,12 @@ class QuickChatUI
         showButtonBindingsEndTime = totalTime+ShowBindingsDuration;
     }
 
+    void PowerOff()
+    {
+        showButtonBindingsEndTime = 0;
+        showKeyBindingsEndTime = 0;
+    }
+
     // Shows message that chat is disabled for a few more seconds.
     // Parameter: int msRemaining = milliseconds left till no longer considered spam.
     void ShowSpamHammerNotification()

@@ -14,7 +14,13 @@ void Main()
 	print("This is Rocket League!");
 }
 
-void OnSettingsChanged() {}
+void OnSettingsChanged()
+{
+    if(!Setting_Power)
+    {
+        qc.qci.PowerOff();
+    }
+}
 
 void OnNewServerAsync()
 {
