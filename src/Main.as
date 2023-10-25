@@ -39,9 +39,14 @@ void OnServerChanged(const string &in login)
 void OnKeyPress(bool down, VirtualKey key)
 {
     auto app = GetApp();
-    if(app.InputPort.CurrentActionMap == "MenuInputsMap" || !down)
+    if(app.InputPort.CurrentActionMap == "MenuInputsMap")
     {
         qc.ClearQueues();
+        return;
+    }
+
+    if(!down)
+    {
         return;
     }
 
