@@ -1,8 +1,8 @@
 [meta]
 name     = "Quick Chats"
 author   = "jtemme8"
-category = "Development"
-version  = "1.0.0"
+category = "Quick Chats"
+version  = "1.0.1"
 
 [script]
 dependencies = [ "NadeoServices" ]
