@@ -1,10 +1,14 @@
 const float BindingsAndMessagesBorderRadius = 10;
-const float ShowBindingsDuration = 3000;
+const float ShowBindingsDuration = 5000;
 // Colors
 const vec4 Pink = vec4(1, 0.2f, 0.6f, 1);
 const vec4 TMGreen = vec4(0.2f, 1, 0.6f, 1);
+const vec4 Blue = vec4(0, 0, 1, 1);
 
 const vec2 notificationPosition = vec2(1500, 950);
+const int qcSizeX = 250;
+const int qcSizeY = 100;
+const int maxMessageLength = 23;
 class QuickChatUI
 {
 
@@ -77,20 +81,29 @@ class QuickChatUI
 
     void ShowBindings()
     {
+        vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
+        vec2 size = UI::GetWindowSize();
+        vec2 pos = UI::GetWindowPos() / (screenSize - size);
+//        print("pos: " + pos.x + ", " + pos.y);
+//        print("size: " + size.y + ", " + size.y);
+//        print("screenSize: " + screenSize.x + ", " + screenSize.y);
+
+        int centerX = int(pos.x) + (8*int(screenSize.x))/10;
+        int centerY = int(pos.y) + (2*int(screenSize.y))/3;
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime)
         {
-            ShowBindingWithMessage(tostring(Setting_QuickChat1Binding), Setting_QuickChat1Message, 2100, 900, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat4Binding), Setting_QuickChat4Message, 1880, 1010, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat3Binding), Setting_QuickChat3Message, 2100, 1010, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat2Binding), Setting_QuickChat2Message, 2320, 1010, 200, 100);
+            ShowBindingWithMessage(tostring(Setting_QuickChat1Binding), Setting_QuickChat1Message, centerX, centerY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat4Binding), Setting_QuickChat4Message, centerX - qcSizeX - 10, centerY + qcSizeY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat3Binding), Setting_QuickChat3Message, centerX, centerY + qcSizeY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat2Binding), Setting_QuickChat2Message, centerX + qcSizeX + 10, centerY + qcSizeY, qcSizeX, qcSizeY);
         }
 
         if(showButtonBindingsEndTime != 0 && totalTime < showButtonBindingsEndTime)
         {
-            ShowBindingWithMessage(tostring(Setting_QuickChat5Binding), Setting_QuickChat5Message, 2100, 900, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat8Binding), Setting_QuickChat8Message, 1880, 1010, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat7Binding), Setting_QuickChat7Message, 2100, 1010, 200, 100);
-            ShowBindingWithMessage(tostring(Setting_QuickChat6Binding), Setting_QuickChat6Message, 2320, 1010, 200, 100);
+            ShowBindingWithMessage(tostring(Setting_QuickChat5Binding), Setting_QuickChat5Message, centerX, centerY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat8Binding), Setting_QuickChat8Message, centerX - qcSizeX - 10, centerY + qcSizeY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat7Binding), Setting_QuickChat7Message, centerX, centerY + qcSizeY, qcSizeX, qcSizeY);
+            ShowBindingWithMessage(tostring(Setting_QuickChat6Binding), Setting_QuickChat6Message, centerX + qcSizeX + 10, centerY + qcSizeY, qcSizeX, qcSizeY);
         }
     }
 
@@ -105,10 +118,11 @@ class QuickChatUI
         nvg::Stroke();
 
         nvg::TextAlign(1);
-        nvg::FontSize(32);
-        nvg::Text(posX+sizeX/2, posY+sizeY/4, binding);
 
-        nvg::TextAlign(0);
-        nvg::Text(posX+10, posY+sizeY/2, message);
+        nvg::FontSize(20);
+        nvg::Text(posX+sizeX/2 - 9, posY+sizeY/4+10, binding);
+
+        nvg::TextAlign(1);
+        nvg::Text(posX+((sizeX - message.Length*8)/2) - 9, posY+2*sizeY/3, message);
     }
 }
