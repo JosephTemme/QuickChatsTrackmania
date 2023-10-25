@@ -21,12 +21,12 @@ void OnNewServerAsync()
     while (GetApp().CurrentPlayground is null) {
         yield();
     }
-//    SendChatFormat("json");
 }
 
 void OnServerChanged(const string &in login)
 {
     print("Server changed.");
+
     totalTime = 0;
     qc.ClearQueues();
 
@@ -38,6 +38,13 @@ void OnServerChanged(const string &in login)
 
 void OnKeyPress(bool down, VirtualKey key)
 {
+    bool buttonWasPressed = false;
+
+    if(!Setting_Power)
+    {
+        return;
+    }
+
     auto app = GetApp();
     if(app.InputPort.CurrentActionMap == "MenuInputsMap")
     {
@@ -56,18 +63,28 @@ void OnKeyPress(bool down, VirtualKey key)
         || key == Setting_QuickChat3Binding
         || key == Setting_QuickChat4Binding)
     {
+        buttonWasPressed = true;
         qc.inputQueueTimes.enqueue(int(totalTime));
         qc.inputQueueVirtualKeys.enqueue(key);
     }
 
     // Process queue
-    qc.ProcessQueue(true);
+    if(buttonWasPressed)
+    {
+        qc.ProcessQueue(true);
+        qc.qci.ActivateKeyBindingDisplay();
+    }
 }
 
 // Called every frame. `dt` is the delta time (milliseconds since last frame).
 void Update(float dt)
 {
     bool buttonWasPressed = false;
+
+    if(!Setting_Power)
+    {
+        return;
+    }
 
     g_dt = dt;
     totalTime += dt;
@@ -107,7 +124,10 @@ void Update(float dt)
 
     // Process queue
     if(buttonWasPressed)
+    {
         qc.ProcessQueue(false);
+        qc.qci.ActivateButtonBindingDisplay();
+    }
 }
 
 void ResetTimersAndQueues()

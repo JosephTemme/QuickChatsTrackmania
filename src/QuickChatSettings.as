@@ -1,9 +1,12 @@
+[Setting name="Toggle On/Off" category="Quick Chats"]
+bool Setting_Power = true;
+
 // Keyboard
 [Setting name="Quick chat 1 Message" category="Quick Chats"]
 string Setting_QuickChat1Message = "This is Rocket League!";
 
 [Setting name="Quick chat 2 Message" category="Quick Chats"]
-string Setting_QuickChat2Message = "I'll do my best.";
+string Setting_QuickChat2Message = "Nice time!";
 
 [Setting name="Quick chat 3 Message" category="Quick Chats"]
 string Setting_QuickChat3Message = "Glhf";
@@ -31,7 +34,7 @@ string Setting_QuickChat5Message = "Need boost!";
 string Setting_QuickChat6Message = "Go for it!";
 
 [Setting name="Quick chat 7 Message" category="Quick Chats"]
-string Setting_QuickChat7Message = "$&@%!";
+string Setting_QuickChat7Message = "Noooo!";
 
 [Setting name="Quick chat 8 Message" category="Quick Chats"]
 string Setting_QuickChat8Message = "Okay.";
