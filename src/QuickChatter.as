@@ -26,7 +26,7 @@ class QuickChatter
     }
 #endif
 
-//        print("\t" + text);
+        print("\t" + text);
         auto pg = GetApp().CurrentPlayground;
         if (pg is null) {
             warn("Can't send message right now because there's no playground!");
@@ -104,7 +104,7 @@ class QuickChatter
         // are detected within the Mis-clickDelay duration.
         if(inputQueueTimes.peakFront() == inputQueueTimes.peakRear())
         {
-            // Queue size is 1
+            // Queue size is 1.
         }
         else if(inputQueueTimes.peakRear() - inputQueueTimes.peakFront() > QuickChatListenDelay)
         {
@@ -113,21 +113,24 @@ class QuickChatter
         }
         else if(lastSentTime == 0 || inputQueueTimes.peakRear() - lastSentTime > MisClickDelay)
         {
-            // Sending chat.
-            if(sentChats.enqueue(inputQueueTimes.peakRear()) != -1)
+            // Send chats if the same key was pressed and the chat won't be spam.
+            if (!sentChats.isQueueFull())
             {
                 if(differentKeysWerePressed)
                 {
-                    sentChats.dequeue();
                     DequeueInputQueues();
                 }
                 else
                 {
-                    lastSentTime = totalTime;
-                    if(isKeyPress)
-                        SendChatFromKey(inputQueueVirtualKeys.peakRear());
-                    else
-                        SendChatFromButton(inputQueueButtons.peakRear());
+                    // Sending chat.
+                    if(sentChats.enqueue(inputQueueTimes.peakRear()) != -1)
+                    {
+                        lastSentTime = totalTime;
+                        if(isKeyPress)
+                            SendChatFromKey(inputQueueVirtualKeys.peakRear());
+                        else
+                            SendChatFromButton(inputQueueButtons.peakRear());
+                    }
                 }
             }
             else

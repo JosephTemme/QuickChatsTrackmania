@@ -96,6 +96,16 @@ class Queue
         return data;
     }
 
+    // Determine if Circular Queue is full
+    bool isQueueFull()
+    {
+        if ((front == 0 && rear == size-1) ||
+                ((rear+1) % size == front))
+            return true;
+        else
+            return false;
+    }
+
     // Function displaying the elements
     // of Circular Queue
     void displayQueue()
