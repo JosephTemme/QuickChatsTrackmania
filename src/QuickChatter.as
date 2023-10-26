@@ -101,7 +101,7 @@ class QuickChatter
         }
 
         // From the "beginning", iterate through circular queue to check if two key presses
-        // are detected within the Mis-clickDelay duration.
+        // are detected quick enough, but not too quick.
         if(inputQueueTimes.peakFront() == inputQueueTimes.peakRear())
         {
             // Queue size is 1.
