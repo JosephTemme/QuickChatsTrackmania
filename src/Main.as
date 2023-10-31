@@ -32,7 +32,6 @@ void OnNewServerAsync()
 void OnServerChanged(const string &in login)
 {
     print("Server changed.");
-
     totalTime = 0;
     qc.ClearQueues();
 
@@ -141,6 +140,7 @@ void ResetTimersAndQueues()
     totalTime = 0;
     g_dt = 0;
     qc.ClearQueues();
+    qc.qci.ActivateSpamHammer(0);
     qc.lastSentTime = 0;
 }
 

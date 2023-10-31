@@ -61,7 +61,7 @@ class QuickChatUI
         vec2 pos = UI::GetWindowPos() / (screenSize - size);
 
         int centerX = int(pos.x) + (7*int(screenSize.x))/10;
-        int centerY = int(pos.y) + (11*int(screenSize.y))/18;
+        int centerY = int(pos.y) + (6*int(screenSize.y))/9;
 
         vec2 notificationPosition = vec2(centerX, centerY);
 
@@ -72,6 +72,11 @@ class QuickChatUI
         {
             // No longer spam.
             oldestSpamContenderTime = 0;
+            return;
+        }
+
+        if(totalTime - oldestSpamContenderTime < 0){
+            trace("totalTime - oldestSpamContenderTime < 0");
             return;
         }
 
@@ -101,7 +106,7 @@ class QuickChatUI
         vec2 pos = UI::GetWindowPos() / (screenSize - size);
 
         int centerX = int(pos.x) + (8*int(screenSize.x))/10;
-        int centerY = int(pos.y) + (2*int(screenSize.y))/3;
+        int centerY = int(pos.y) + (13*int(screenSize.y))/18;
 
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime)
         {
