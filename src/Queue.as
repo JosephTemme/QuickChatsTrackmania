@@ -6,7 +6,8 @@ class Queue
     int front;
 
     // Circular Queue
-    int size;
+    int size; // capacity
+    int length; // num elements
     int[] arr;
 
     Queue() {}
@@ -15,6 +16,7 @@ class Queue
     {
        front = rear = -1;
        size = s;
+       length = 0;
        arr = array<int>(s);
     }
 
@@ -43,6 +45,8 @@ class Queue
             arr[rear] = value;
         }
 
+        length++;
+
         return value;
     }
 
@@ -66,6 +70,8 @@ class Queue
             front = 0;
         else
             front++;
+
+        length--;
 
         return data;
     }
@@ -128,6 +134,18 @@ class Queue
 
             for (int i = 0; i <= rear; i++)
                 print(arr[i]);
+        }
+    }
+
+    // Subtract totalTime from queue in prep to reset totalTime.
+    void updateTotalTime(int totalTime)
+    {
+        for(int index = 0; index < size; index++)
+        {
+            if(arr[index] != 0)
+            {
+                arr[index] -= totalTime;
+            }
         }
     }
 }

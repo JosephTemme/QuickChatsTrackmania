@@ -75,11 +75,6 @@ class QuickChatUI
             return;
         }
 
-        if(totalTime - oldestSpamContenderTime < 0){
-            trace("totalTime - oldestSpamContenderTime < 0");
-            return;
-        }
-
         int convertedSecondsRemaining = int((SpamDetectionDuration - (totalTime - oldestSpamContenderTime))/1000) +1;
         string message = "Chat disabled for " + convertedSecondsRemaining;
         if(convertedSecondsRemaining == 1)
@@ -97,6 +92,40 @@ class QuickChatUI
         nvg::FontSize(52);
 
         nvg::Text(notificationPosition, message);
+    }
+
+    bool IsSpamHammerDown()
+    {
+        if(totalTime - oldestSpamContenderTime < 0)
+            return true;
+        return false;
+    }
+
+    void UpdateTotalTime(int prevTotalTime)
+    {
+//        if(oldestSpamContenderTime > 0)
+//            oldestSpamContenderTime -= totalTime;
+//
+//        if(showKeyBindingsEndTime > 0)
+//            showKeyBindingsEndTime -= totalTime;
+//
+//        if(showButtonBindingsEndTime > 0)
+//            showButtonBindingsEndTime -= totalTime;
+//
+//        if(oldestSpamContenderTime < 0)
+//        {
+//            oldestSpamContenderTime = 0;
+//        }
+//
+//        if(showKeyBindingsEndTime < 0)
+//        {
+//            showKeyBindingsEndTime = 0;
+//        }
+//
+//        if(showButtonBindingsEndTime < 0)
+//        {
+//            showButtonBindingsEndTime = 0;
+//        }
     }
 
     void ShowBindings()

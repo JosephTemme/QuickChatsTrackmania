@@ -83,7 +83,8 @@ class QuickChatter
     }
 
     // Sends chats, if applicable.
-    // parameters: bool isKeyPress: true if keyboard button press and not controller button press.
+    // parameters: bool isKeyPress: true if keyboard button (VirtualKey)
+    // press and not controller button (Button) press.
     void ProcessQueue(bool isKeyPress)
     {
         bool differentKeysWerePressed =
@@ -94,11 +95,6 @@ class QuickChatter
                || (!isKeyPress
                     && inputQueueButtons.peakFront() != -1 && inputQueueButtons.peakRear() != -1
                     && inputQueueButtons.peakFront() != inputQueueButtons.peakRear());
-
-        // Dequeue from sentChats once out of spam detection range.
-        if(totalTime - sentChats.peakFront() > SpamDetectionDuration){
-            sentChats.dequeue();
-        }
 
         // From the "beginning", iterate through circular queue to check if two key presses
         // are detected quick enough, but not too quick.
@@ -143,6 +139,7 @@ class QuickChatter
         else
         {
             print("Mis-click/Sticky key/Supersonic spam protection.");
+//            DisplayQueues();
             ClearQueues();
         }
 
@@ -152,6 +149,12 @@ class QuickChatter
     float MillisecondsRemainingOnSpamCooldown()
     {
         return inputQueueTimes.peakRear() - sentChats.peakFront();
+    }
+
+    // Subtract totalTime from queue in prep to reset totalTime.
+    void UpdateTotalTime(int prevTotalTime)
+    {
+        inputQueueTimes.updateTotalTime(prevTotalTime);
     }
 
     int DequeueInputQueues()
@@ -184,12 +187,13 @@ class QuickChatter
         print("totalTime: \t" + totalTime);
         print("g_dt: \t" + g_dt);
 
+        print("inputQueueTimes: ");
+        inputQueueTimes.displayQueue();
+
         print("inputQueueVirtualKeys: ");
         inputQueueVirtualKeys.displayQueue();
         print("inputQueueButtons: ");
         inputQueueButtons.displayQueue();
-        print("inputQueueTimes: ");
-        inputQueueTimes.displayQueue();
     }
 
 

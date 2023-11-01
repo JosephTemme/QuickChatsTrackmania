@@ -11,7 +11,7 @@ enum Button {
 
 void Main()
 {
-	print("This is Rocket League!");
+	trace("This is Rocket League!");
 }
 
 void OnSettingsChanged()
@@ -32,8 +32,7 @@ void OnNewServerAsync()
 void OnServerChanged(const string &in login)
 {
     print("Server changed.");
-    totalTime = 0;
-    qc.ClearQueues();
+    ResetTimersAndQueues();
 
     if (login != "") {
         return;
@@ -43,11 +42,21 @@ void OnServerChanged(const string &in login)
 
 void OnKeyPress(bool down, VirtualKey key)
 {
-    bool buttonWasPressed = false;
+    bool virtualKeyWasPressed = false;
 
-    if(!Setting_Power)
+    if(!Setting_Power || qc.qci.IsSpamHammerDown())
     {
         return;
+    }
+
+    if(qc.sentChats.peakFront() != -1)
+    {
+        // Dequeue from sentChats once out of spam detection range.
+        if(totalTime - qc.sentChats.peakFront() > SpamDetectionDuration)
+        {
+//            print("sentChats.dequeue()");
+            qc.sentChats.dequeue();
+        }
     }
 
     auto app = GetApp();
@@ -68,15 +77,15 @@ void OnKeyPress(bool down, VirtualKey key)
         || key == Setting_QuickChat3Binding
         || key == Setting_QuickChat4Binding)
     {
-        buttonWasPressed = true;
+        virtualKeyWasPressed = true;
         qc.inputQueueTimes.enqueue(int(totalTime));
         qc.inputQueueVirtualKeys.enqueue(key);
     }
 
     // Process queue
-    if(buttonWasPressed)
+    if(virtualKeyWasPressed)
     {
-        qc.ProcessQueue(true);
+        qc.ProcessQueue(virtualKeyWasPressed);
         qc.qci.ActivateKeyBindingDisplay();
     }
 }
@@ -86,7 +95,7 @@ void Update(float dt)
 {
     bool buttonWasPressed = false;
 
-    if(!Setting_Power)
+    if(!Setting_Power || qc.qci.IsSpamHammerDown())
     {
         return;
     }
@@ -94,10 +103,14 @@ void Update(float dt)
     g_dt = dt;
     totalTime += dt;
 
-    // Prevent float overflow by resetting counters.
-    if (totalTime > sixteenMinutes)
+    if(qc.sentChats.peakFront() != -1)
     {
-        ResetTimersAndQueues();
+        // Dequeue from sentChats once out of spam detection range.
+        if(totalTime - qc.sentChats.peakFront() > SpamDetectionDuration)
+        {
+//            print("sentChats.dequeue()");
+            qc.sentChats.dequeue();
+        }
     }
 
     auto app = GetApp();
@@ -130,13 +143,23 @@ void Update(float dt)
     // Process queue
     if(buttonWasPressed)
     {
-        qc.ProcessQueue(false);
+        qc.ProcessQueue(!buttonWasPressed);
         qc.qci.ActivateButtonBindingDisplay();
     }
 }
 
+void UpdateTotalTime()
+{
+    print("UpdateTotalTime()");
+    qc.qci.UpdateTotalTime(int(totalTime));
+    qc.UpdateTotalTime(int(totalTime));
+
+    totalTime = 0;
+}
+
 void ResetTimersAndQueues()
 {
+    print("ResetTimersAndQueues()");
     totalTime = 0;
     g_dt = 0;
     qc.ClearQueues();
