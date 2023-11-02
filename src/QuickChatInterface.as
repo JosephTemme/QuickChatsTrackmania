@@ -3,17 +3,17 @@ const float ShowBindingsDuration = 3000;
 // Colors
 const vec4 Pink = vec4(1, 0.2f, 0.6f, 1);
 const vec4 TMGreen = vec4(0.2f, 1, 0.6f, 1);
+const vec4 TMGreenShadow = vec4(0.2f, 1, 0.6f, 0.5);
 const vec4 Blue = vec4(0, 0, 1, 1);
+const vec4 BlackShadow = vec4(0, 0, 0, 0.6);
 
-const int qcSizeX = 250;
-const int qcSizeY = 100;
 const int maxMessageLength = 23;
 class QuickChatUI
 {
-
     float oldestSpamContenderTime = 0;
     float showKeyBindingsEndTime = 0;
     float showButtonBindingsEndTime = 0;
+
 
     QuickChatUI() {}
 
@@ -55,10 +55,13 @@ class QuickChatUI
     // Parameter: int msRemaining = milliseconds left till no longer considered spam.
     void ShowSpamHammerNotification()
     {
+        vec2 settingPos = vec2(1.0f, 1.0f);
+        vec2 settingSize = vec2(350, 350);
         //ToDo: Re-use.
         vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
         vec2 size = UI::GetWindowSize();
-        vec2 pos = UI::GetWindowPos() / (screenSize - size);
+//        vec2 pos = UI::GetWindowPos() / (screenSize - size);
+        vec2 pos = settingPos * (screenSize - settingSize);
 
         int centerX = int(pos.x) + (7*int(screenSize.x))/10;
         int centerY = int(pos.y) + (6*int(screenSize.y))/9;
@@ -89,7 +92,7 @@ class QuickChatUI
         nvg::BeginPath();
         nvg::StrokeColor(vec4(1.0, 1.0, 1.0, 1.0));
         nvg::FillColor(vec4(1.0, 1.0, 1.0, 1.0));
-        nvg::FontSize(52);
+        nvg::FontSize(Setting_FontSize*3);
 
         nvg::Text(notificationPosition, message);
     }
@@ -101,75 +104,81 @@ class QuickChatUI
         return false;
     }
 
-    void UpdateTotalTime(int prevTotalTime)
-    {
-//        if(oldestSpamContenderTime > 0)
-//            oldestSpamContenderTime -= totalTime;
-//
-//        if(showKeyBindingsEndTime > 0)
-//            showKeyBindingsEndTime -= totalTime;
-//
-//        if(showButtonBindingsEndTime > 0)
-//            showButtonBindingsEndTime -= totalTime;
-//
-//        if(oldestSpamContenderTime < 0)
-//        {
-//            oldestSpamContenderTime = 0;
-//        }
-//
-//        if(showKeyBindingsEndTime < 0)
-//        {
-//            showKeyBindingsEndTime = 0;
-//        }
-//
-//        if(showButtonBindingsEndTime < 0)
-//        {
-//            showButtonBindingsEndTime = 0;
-//        }
-    }
-
     void ShowBindings()
     {
+        bool isShowingBindings = false;
         vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
-        vec2 size = UI::GetWindowSize();
-        vec2 pos = UI::GetWindowPos() / (screenSize - size);
+        vec2 size = QCSize*5;
+        vec2 pos = vec2(screenSize.x * 0.75f, screenSize.y * 0.5f);
 
-        int centerX = int(pos.x) + (8*int(screenSize.x))/10;
-        int centerY = int(pos.y) + (13*int(screenSize.y))/18;
+        vec2 center = vec2(pos.x + size.x * 0.5f, pos.y + size.y * 0.5f);
+        vec2 textPos = vec2(pos.x + size.x * 0.1f, pos.y + size.y * 0.1f);
 
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime)
         {
-            ShowBindingWithMessage(tostring(Setting_QuickChat1Binding), Setting_QuickChat1Message, centerX, centerY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat4Binding), Setting_QuickChat4Message, centerX - qcSizeX - 10, centerY + qcSizeY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat3Binding), Setting_QuickChat3Message, centerX, centerY + qcSizeY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat2Binding), Setting_QuickChat2Message, centerX + qcSizeX + 10, centerY + qcSizeY, qcSizeX, qcSizeY);
+            isShowingBindings = true;
+            ShowQuickChatsHeader(textPos.x, textPos.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat1Binding), Setting_QuickChat1Message,
+                textPos.x, textPos.y + QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat4Binding), Setting_QuickChat4Message,
+                textPos.x, textPos.y + 2*QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat3Binding), Setting_QuickChat3Message,
+                textPos.x, textPos.y + 3*QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat2Binding), Setting_QuickChat2Message,
+                textPos.x, textPos.y + 4*QCSize.y, QCSize.x, QCSize.y);
         }
 
         if(showButtonBindingsEndTime != 0 && totalTime < showButtonBindingsEndTime)
         {
-            ShowBindingWithMessage(tostring(Setting_QuickChat5Binding), Setting_QuickChat5Message, centerX, centerY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat8Binding), Setting_QuickChat8Message, centerX - qcSizeX - 10, centerY + qcSizeY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat7Binding), Setting_QuickChat7Message, centerX, centerY + qcSizeY, qcSizeX, qcSizeY);
-            ShowBindingWithMessage(tostring(Setting_QuickChat6Binding), Setting_QuickChat6Message, centerX + qcSizeX + 10, centerY + qcSizeY, qcSizeX, qcSizeY);
+            isShowingBindings = true;
+            ShowQuickChatsHeader(textPos.x, textPos.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat5Binding), Setting_QuickChat5Message,
+                textPos.x, textPos.y + QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat8Binding), Setting_QuickChat8Message,
+                textPos.x, textPos.y + 2*QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat6Binding), Setting_QuickChat6Message,
+                textPos.x, textPos.y + 3*QCSize.y, QCSize.x, QCSize.y);
+            ShowBindingWithMessage(tostring(Setting_QuickChat7Binding), Setting_QuickChat7Message,
+                textPos.x, textPos.y + 4*QCSize.y, QCSize.x, QCSize.y);
         }
+
+        if(isShowingBindings)
+        {
+            // Rectangle
+            nvg::BeginPath();
+            nvg::RoundedRect(pos.x, pos.y, size.x, size.y, BindingsAndMessagesBorderRadius);
+            nvg::StrokeWidth(1);
+            nvg::StrokeColor(Setting_QuickChatsFontColor);
+//            nvg::StrokeColor(TMGreen);
+
+
+            // Fill
+            nvg::FillColor(BlackShadow);
+            nvg::Fill();
+
+            nvg::Stroke();
+        }
+    }
+
+    void ShowQuickChatsHeader(float posX, float posY)
+    {
+        //Text
+        nvg::TextAlign(1);
+        nvg::FontFace(6);
+        nvg::FillColor(Setting_QuickChatsFontColor);
+        nvg::FontSize(Setting_FontSize + 4);
+        nvg::Text(posX, posY, "Quick Chats");
+        nvg::Stroke();
     }
 
     void ShowBindingWithMessage(const string &in binding, const string &in message, float posX, float posY, float sizeX, float sizeY)
     {
-        // Rectangle
-        nvg::BeginPath();
-        nvg::RoundedRect(posX, posY, sizeX, sizeY, BindingsAndMessagesBorderRadius);
-        nvg::StrokeWidth(5);
-
-        nvg::StrokeColor(TMGreen);
+        //Text
+        nvg::TextAlign(1);
+        nvg::FontFace(2);
+        nvg::FillColor(Setting_QuickChatsFontColor);
+        nvg::FontSize(Setting_FontSize);
+        nvg::Text(posX, posY, binding + "\t" + message);
         nvg::Stroke();
-
-        nvg::TextAlign(1);
-
-        nvg::FontSize(20);
-        nvg::Text(posX+sizeX/2 - 9, posY+sizeY/4+10, binding);
-
-        nvg::TextAlign(1);
-        nvg::Text(posX+((sizeX - message.Length*8)/2) - 9, posY+2*sizeY/3, message);
     }
 }

@@ -49,6 +49,11 @@ void OnKeyPress(bool down, VirtualKey key)
         return;
     }
 
+    if(!down)
+    {
+        return;
+    }
+
     if(qc.sentChats.peakFront() != -1)
     {
         // Dequeue from sentChats once out of spam detection range.
@@ -63,11 +68,6 @@ void OnKeyPress(bool down, VirtualKey key)
     if(app.InputPort.CurrentActionMap == "MenuInputsMap")
     {
         qc.ClearQueues();
-        return;
-    }
-
-    if(!down)
-    {
         return;
     }
 
@@ -151,7 +151,6 @@ void Update(float dt)
 void UpdateTotalTime()
 {
     print("UpdateTotalTime()");
-    qc.qci.UpdateTotalTime(int(totalTime));
     qc.UpdateTotalTime(int(totalTime));
 
     totalTime = 0;

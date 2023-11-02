@@ -27,17 +27,17 @@ class QuickChatter
 #endif
 
         print("\t" + text);
-        auto pg = GetApp().CurrentPlayground;
-        if (pg is null) {
-            warn("Can't send message right now because there's no playground!");
-            return;
-        }
-
-        if (text.Length > 2000) {
-            pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
-        } else {
-            pg.Interface.ChatEntry = text;
-        }
+//        auto pg = GetApp().CurrentPlayground;
+//        if (pg is null) {
+//            warn("Can't send message right now because there's no playground!");
+//            return;
+//        }
+//
+//        if (text.Length > 2000) {
+//            pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
+//        } else {
+//            pg.Interface.ChatEntry = text;
+//        }
 
         ClearQueues();
     }
