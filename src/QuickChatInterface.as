@@ -13,7 +13,10 @@ class QuickChatUI
     float oldestSpamContenderTime = 0;
     float showKeyBindingsEndTime = 0;
     float showButtonBindingsEndTime = 0;
-
+    vec2 screenSize;
+    vec2 boxSize;
+    vec2 boxPosition;
+    vec2 notificationPosition;
 
     QuickChatUI() {}
 
@@ -107,12 +110,11 @@ class QuickChatUI
     void ShowBindings()
     {
         bool isShowingBindings = false;
-        vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
-        vec2 size = QCSize*5;
-        vec2 pos = vec2(screenSize.x * 0.75f, screenSize.y * 0.5f);
+        screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
+        boxSize = QCSize*5;
+        boxPosition = vec2(screenSize.x * 0.75f * Setting_Position.x, screenSize.y * 0.5f * Setting_Position.y);
 
-        vec2 center = vec2(pos.x + size.x * 0.5f, pos.y + size.y * 0.5f);
-        vec2 textPos = vec2(pos.x + size.x * 0.1f, pos.y + size.y * 0.1f);
+        vec2 textPos = vec2(boxPosition.x + boxSize.x * 0.1f, boxPosition.y + boxSize.y * 0.1f);
 
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime)
         {
@@ -146,7 +148,7 @@ class QuickChatUI
         {
             // Rectangle
             nvg::BeginPath();
-            nvg::RoundedRect(pos.x, pos.y, size.x, size.y, BindingsAndMessagesBorderRadius);
+            nvg::RoundedRect(boxPosition.x, boxPosition.y, boxSize.x, boxSize.y, BindingsAndMessagesBorderRadius);
             nvg::StrokeWidth(1);
             nvg::StrokeColor(Setting_QuickChatsFontColor);
 //            nvg::StrokeColor(TMGreen);
