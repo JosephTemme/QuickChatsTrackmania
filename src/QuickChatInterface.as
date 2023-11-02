@@ -16,13 +16,15 @@ class QuickChatUI
     vec2 screenSize;
     vec2 boxSize;
     vec2 boxPosition;
-    vec2 notificationPosition;
     vec4 BlackShadow = vec4(0, 0, 0, Setting_ShadowOpacity);
 
     QuickChatUI() {}
 
     void RenderInterface()
     {
+        screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
+        boxSize = QCSize*5;
+        boxPosition = vec2(screenSize.x * 0.65f * Setting_Position.x, screenSize.y * 0.5f * Setting_Position.y);
         ShowBindings();
         ShowNotifications();
     }
@@ -59,18 +61,7 @@ class QuickChatUI
     // Parameter: int msRemaining = milliseconds left till no longer considered spam.
     void ShowSpamHammerNotification()
     {
-        vec2 settingPos = vec2(1.0f, 1.0f);
-        vec2 settingSize = vec2(350, 350);
-        //ToDo: Re-use.
-        vec2 screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
-        vec2 size = UI::GetWindowSize();
-//        vec2 pos = UI::GetWindowPos() / (screenSize - size);
-        vec2 pos = settingPos * (screenSize - settingSize);
-
-        int centerX = int(pos.x) + (7*int(screenSize.x))/10;
-        int centerY = int(pos.y) + (6*int(screenSize.y))/9;
-
-        vec2 notificationPosition = vec2(centerX, centerY);
+        vec2 notificationPosition = boxPosition - boxSize*Setting_SpamNotificationPosition;
 
         if(oldestSpamContenderTime == 0)
             return;
@@ -96,7 +87,7 @@ class QuickChatUI
         nvg::BeginPath();
         nvg::StrokeColor(vec4(1.0, 1.0, 1.0, 1.0));
         nvg::FillColor(vec4(1.0, 1.0, 1.0, 1.0));
-        nvg::FontSize(Setting_FontSize*3);
+        nvg::FontSize(Setting_FontSize*2);
 
         nvg::Text(notificationPosition, message);
     }
@@ -111,10 +102,6 @@ class QuickChatUI
     void ShowBindings()
     {
         bool isShowingBindings = false;
-        screenSize = vec2(Draw::GetWidth(), Draw::GetHeight());
-        boxSize = QCSize*5;
-        boxPosition = vec2(screenSize.x * 0.65f * Setting_Position.x, screenSize.y * 0.5f * Setting_Position.y);
-
         vec2 textPos = vec2(boxPosition.x + boxSize.x * 0.1f, boxPosition.y + boxSize.y * 0.1f);
 
         if(showKeyBindingsEndTime != 0 && totalTime < showKeyBindingsEndTime

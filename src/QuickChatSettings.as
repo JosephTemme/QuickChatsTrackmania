@@ -63,8 +63,11 @@ vec2 QCSize = vec2(60, 80);
 int Setting_FontSize = 22;
 
 [Setting name="Shadow Opacity" category="Theme Settings"]
-float Setting_ShadowOpacity = 0.5;
+float Setting_ShadowOpacity = 0.6;
 
 [Setting name="Text Color" category="Theme Settings" color]
-vec4 Setting_QuickChatsFontColor = vec4(0.2f, 1, 0.6f, 0.5);
+vec4 Setting_QuickChatsFontColor = vec4(0.2f, 1, 0.6f, 1);
+
+[Setting name="Spam Notification Position" category="Theme Settings" color]
+vec2 Setting_SpamNotificationPosition = vec2(0.1, 0.1);
 
