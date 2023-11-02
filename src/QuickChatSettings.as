@@ -62,5 +62,9 @@ vec2 QCSize = vec2(60, 80);
 [Setting name="Font Size" category="Theme Settings"]
 int Setting_FontSize = 22;
 
+[Setting name="Shadow Opacity" category="Theme Settings"]
+float Setting_ShadowOpacity = 0.5;
+
 [Setting name="Text Color" category="Theme Settings" color]
-vec4 Setting_QuickChatsFontColor = vec4(0.2f, 1, 0.6f, 1);
+vec4 Setting_QuickChatsFontColor = vec4(0.2f, 1, 0.6f, 0.5);
+
