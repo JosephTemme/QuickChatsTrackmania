@@ -1,8 +1,0 @@
-[meta]
-name     = "Quick Chats"
-author   = "jtemme8"
-category = "Quick Chats"
-version  = "1.0.2"
-
-[script]
-dependencies = [ "NadeoServices" ]
