@@ -1,2 +1,2 @@
-# QuickChatsTrackmania
+# RL Quick Chats
 Quick chats for Trackmania! Inspired by Rocket League quick chats.
